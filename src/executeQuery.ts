@@ -47,26 +47,17 @@ export type ExecuteQueryOptions<Variables> = BuildRequestHeadersOptions & {
   fetchFn?: typeof fetch;
 };
 
-export function rawExecuteQuery<
-  Result = unknown,
-  Variables = Record<string, unknown>,
->(
+export function rawExecuteQuery<Result = unknown, Variables = unknown>(
   query: TypedDocumentNode<Result, Variables>,
   options: ExecuteQueryOptions<Variables>,
 ): Promise<[Result, Response]>;
 
-export function rawExecuteQuery<
-  Result = unknown,
-  Variables = Record<string, unknown>,
->(
+export function rawExecuteQuery<Result = unknown, Variables = unknown>(
   query: GraphQLWeb.DocumentNode,
   options: ExecuteQueryOptions<Variables>,
 ): Promise<[Result, Response]>;
 
-export function rawExecuteQuery<
-  Result = unknown,
-  Variables = Record<string, unknown>,
->(
+export function rawExecuteQuery<Result = unknown, Variables = unknown>(
   query: string,
   options: ExecuteQueryOptions<Variables>,
 ): Promise<[Result, Response]>;
@@ -133,26 +124,20 @@ export async function rawExecuteQuery<Result, Variables>(
   return [parsedBody.data, response];
 }
 
-export function executeQuery<
-  Result = unknown,
-  Variables = Record<string, unknown>,
->(
+export function executeQuery<Result = unknown, Variables = unknown>(
   query: TypedDocumentNode<Result, Variables>,
   options: ExecuteQueryOptions<Variables>,
 ): Promise<Result>;
 
-export function executeQuery<
-  Result = unknown,
-  Variables = Record<string, unknown>,
->(
+export function executeQuery<Result = unknown, Variables = unknown>(
   query: GraphQLWeb.DocumentNode,
   options: ExecuteQueryOptions<Variables>,
 ): Promise<Result>;
 
-export function executeQuery<
-  Result = unknown,
-  Variables = Record<string, unknown>,
->(query: string, options: ExecuteQueryOptions<Variables>): Promise<Result>;
+export function executeQuery<Result = unknown, Variables = unknown>(
+  query: string,
+  options: ExecuteQueryOptions<Variables>,
+): Promise<Result>;
 
 /**
  * Executes a GraphQL query using the DatoCMS Content Delivery API
