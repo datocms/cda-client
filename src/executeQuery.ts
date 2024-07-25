@@ -52,13 +52,16 @@ export function rawExecuteQuery<
   Variables = Record<string, unknown>,
 >(
   query: TypedDocumentNode<Result, Variables>,
-  variables?: Variables,
+  options: ExecuteQueryOptions<Variables>,
 ): Promise<[Result, Response]>;
 
 export function rawExecuteQuery<
   Result = unknown,
   Variables = Record<string, unknown>,
->(query: string, variables?: Variables): Promise<[Result, Response]>;
+>(
+  query: string,
+  options: ExecuteQueryOptions<Variables>,
+): Promise<[Result, Response]>;
 
 /**
  * Executes a GraphQL query using the DatoCMS Content Delivery API
@@ -127,13 +130,13 @@ export function executeQuery<
   Variables = Record<string, unknown>,
 >(
   query: TypedDocumentNode<Result, Variables>,
-  variables?: Variables,
+  options: ExecuteQueryOptions<Variables>,
 ): Promise<Result>;
 
 export function executeQuery<
   Result = unknown,
   Variables = Record<string, unknown>,
->(query: string, variables?: Variables): Promise<Result>;
+>(query: string, options: ExecuteQueryOptions<Variables>): Promise<Result>;
 
 /**
  * Executes a GraphQL query using the DatoCMS Content Delivery API
