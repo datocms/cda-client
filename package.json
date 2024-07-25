@@ -1,0 +1,33 @@
+{
+  "name": "@datocms/cda-client",
+  "version": "0.1.0",
+  "description": "JS client for DatoCMS GraphQL Content Delivery API based on the browser Fetch API",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "typings": "dist/types/index.d.ts",
+  "scripts": {
+    "test": "echo 1",
+    "prebuild": "rimraf dist",
+    "build": "tsc && tsc --project ./tsconfig.esnext.json",
+    "prepare": "npm run test && npm run build",
+    "format": "biome check src --write && biome format --write src"
+  },
+  "keywords": ["datocms", "client"],
+  "sideEffects": false,
+  "directories": {
+    "lib": "dist"
+  },
+  "files": ["dist", "src"],
+  "author": "Stefano Verna <s.verna@datocms.com>",
+  "homepage": "https://github.com/datocms/cma-client",
+  "license": "MIT",
+  "dependencies": {
+    "@0no-co/graphql.web": "^1.0.7"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.8.2",
+    "np": "^10.0.6",
+    "rimraf": "^5.0.7",
+    "typescript": "^5.5.2"
+  }
+}
