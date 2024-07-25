@@ -16,5 +16,5 @@ export function buildRequestInit(
       query: stringifiedQuery,
       variables: options?.variables,
     }),
-  };
+  } as const;
 }
