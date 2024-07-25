@@ -87,9 +87,11 @@ export async function rawExecuteQuery<Result, Variables>(
     );
   }
 
+  const serializedQuery = typeof query === 'string' ? query : print(query);
+
   const response = await fetchFn(
     'https://graphql.datocms.com/',
-    buildRequestInit(query, options),
+    buildRequestInit(serializedQuery, options),
   );
 
   const parsedBody = response.headers
@@ -102,8 +104,6 @@ export async function rawExecuteQuery<Result, Variables>(
     : await response.text();
 
   const autoRetry = 'autoRetry' in options ? options.autoRetry : true;
-
-  const serializedQuery = typeof query === 'string' ? query : print(query);
 
   if (response.status === 429 && autoRetry) {
     const rateLimitReset = response.headers.get('X-RateLimit-Reset');

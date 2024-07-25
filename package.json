@@ -1,6 +1,6 @@
 {
   "name": "@datocms/cda-client",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "JS client for DatoCMS GraphQL Content Delivery API based on the browser Fetch API",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
