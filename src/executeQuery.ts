@@ -1,10 +1,8 @@
 import type * as GraphQLWeb from '@0no-co/graphql.web';
 import { print } from '@0no-co/graphql.web';
 import { ApiError } from './ApiError';
-import {
-  type BuildRequestHeadersOptions,
-  buildRequestHeaders,
-} from './buildRequestHeaders';
+import type { BuildRequestHeadersOptions } from './buildRequestHeaders';
+import { buildRequestInit } from './buildRequestInit';
 
 /** A GraphQL `DocumentNode` with attached generics for its result data and variables.
  *
@@ -42,10 +40,11 @@ export type TypedDocumentNode<
   __ensureTypesOfVariablesAndResultMatching?: (variables: Variables) => Result;
 };
 
-export type ExecuteQueryOptions<Variables> = BuildRequestHeadersOptions & {
-  variables?: Variables;
-  fetchFn?: typeof fetch;
-};
+export type ExecuteQueryOptions<Variables = unknown> =
+  BuildRequestHeadersOptions & {
+    variables?: Variables;
+    fetchFn?: typeof fetch;
+  };
 
 export function rawExecuteQuery<Result = unknown, Variables = unknown>(
   query: TypedDocumentNode<Result, Variables>,
@@ -66,7 +65,7 @@ export function rawExecuteQuery<Result = unknown, Variables = unknown>(
  * Executes a GraphQL query using the DatoCMS Content Delivery API
  */
 export async function rawExecuteQuery<Result, Variables>(
-  query: string | TypedDocumentNode<Result, Variables>,
+  query: string | GraphQLWeb.DocumentNode,
   options: ExecuteQueryOptions<Variables>,
 ) {
   if (!query) {
@@ -84,16 +83,10 @@ export async function rawExecuteQuery<Result, Variables>(
     );
   }
 
-  const stringifiedQuery = typeof query === 'string' ? query : print(query);
-
-  const response = await fetchFn('https://graphql.datocms.com/', {
-    method: 'POST',
-    headers: buildRequestHeaders(options),
-    body: JSON.stringify({
-      query: stringifiedQuery,
-      variables: options?.variables,
-    }),
-  });
+  const response = await fetchFn(
+    'https://graphql.datocms.com/',
+    buildRequestInit(query, options),
+  );
 
   const parsedBody = response.headers
     .get('content-type')
@@ -116,7 +109,7 @@ export async function rawExecuteQuery<Result, Variables>(
         headers: response.headers,
         body: parsedBody,
       },
-      stringifiedQuery,
+      typeof query === 'string' ? query : print(query),
       options,
     );
   }
