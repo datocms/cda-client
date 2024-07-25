@@ -59,6 +59,14 @@ export function rawExecuteQuery<
   Result = unknown,
   Variables = Record<string, unknown>,
 >(
+  query: GraphQLWeb.DocumentNode,
+  options: ExecuteQueryOptions<Variables>,
+): Promise<[Result, Response]>;
+
+export function rawExecuteQuery<
+  Result = unknown,
+  Variables = Record<string, unknown>,
+>(
   query: string,
   options: ExecuteQueryOptions<Variables>,
 ): Promise<[Result, Response]>;
@@ -130,6 +138,14 @@ export function executeQuery<
   Variables = Record<string, unknown>,
 >(
   query: TypedDocumentNode<Result, Variables>,
+  options: ExecuteQueryOptions<Variables>,
+): Promise<Result>;
+
+export function executeQuery<
+  Result = unknown,
+  Variables = Record<string, unknown>,
+>(
+  query: GraphQLWeb.DocumentNode,
   options: ExecuteQueryOptions<Variables>,
 ): Promise<Result>;
 
