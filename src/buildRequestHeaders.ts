@@ -18,8 +18,8 @@ export type BuildRequestHeadersOptions = {
 export function buildRequestHeaders(
   options: BuildRequestHeadersOptions,
 ): HeadersInit {
-  // Headers to instruct DatoCMS on how to process the request:
   const headers: HeadersInit = {
+    Accept: 'application/json',
     // API token for the project
     Authorization: `Bearer ${options.token}`,
   };

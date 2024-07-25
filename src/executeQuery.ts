@@ -44,7 +44,11 @@ export type ExecuteQueryOptions<Variables = unknown> =
   BuildRequestHeadersOptions & {
     variables?: Variables;
     fetchFn?: typeof fetch;
+    autoRetry?: boolean;
   };
+
+export type RawExecuteQueryOptions<Variables = unknown> =
+  ExecuteQueryOptions<Variables> & { retryCount?: number };
 
 export function rawExecuteQuery<Result = unknown, Variables = unknown>(
   query: TypedDocumentNode<Result, Variables>,
@@ -66,7 +70,7 @@ export function rawExecuteQuery<Result = unknown, Variables = unknown>(
  */
 export async function rawExecuteQuery<Result, Variables>(
   query: string | GraphQLWeb.DocumentNode,
-  options: ExecuteQueryOptions<Variables>,
+  options: RawExecuteQueryOptions<Variables>,
 ) {
   if (!query) {
     throw new Error('Query is not valid');
@@ -97,6 +101,26 @@ export async function rawExecuteQuery<Result, Variables>(
       })
     : await response.text();
 
+  const autoRetry = 'autoRetry' in options ? options.autoRetry : true;
+
+  const serializedQuery = typeof query === 'string' ? query : print(query);
+
+  if (response.status === 429 && autoRetry) {
+    const rateLimitReset = response.headers.get('X-RateLimit-Reset');
+    const retryCount = (options.retryCount || 0) + 1;
+
+    const waitTimeInSecs = rateLimitReset
+      ? Number.parseInt(rateLimitReset, 10)
+      : retryCount;
+
+    await wait(waitTimeInSecs * 1000);
+
+    return rawExecuteQuery<Result, Variables>(serializedQuery, {
+      ...options,
+      retryCount,
+    } as RawExecuteQueryOptions<Variables>);
+  }
+
   if (
     !response.ok ||
     typeof parsedBody === 'string' ||
@@ -109,7 +133,7 @@ export async function rawExecuteQuery<Result, Variables>(
         headers: response.headers,
         body: parsedBody,
       },
-      typeof query === 'string' ? query : print(query),
+      serializedQuery,
       options,
     );
   }
@@ -141,4 +165,10 @@ export async function executeQuery<Result, Variables>(
 ) {
   const result = await rawExecuteQuery(query as string, options);
   return result[0];
+}
+
+function wait(time: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, time);
+  });
 }
