@@ -1,8 +1,10 @@
 import type * as GraphQLWeb from '@0no-co/graphql.web';
 import { print } from '@0no-co/graphql.web';
 import { ApiError } from './ApiError';
-import type { BuildRequestHeadersOptions } from './buildRequestHeaders';
-import { buildRequestInit } from './buildRequestInit';
+import {
+  type BuildRequestInitOptions,
+  buildRequestInit,
+} from './buildRequestInit';
 
 /** A GraphQL `DocumentNode` with attached generics for its result data and variables.
  *
@@ -41,9 +43,9 @@ export type TypedDocumentNode<
 };
 
 export type ExecuteQueryOptions<Variables = unknown> =
-  BuildRequestHeadersOptions & {
-    /** The variables to be sent with the query */
-    variables?: Variables;
+  BuildRequestInitOptions<Variables> & {
+    /** GraphQL endpoint URL. Defaults to 'https://graphql.datocms.com' */
+    graphqlEndpointUrl?: string;
     /** A fetch function to be used instead of the default `fetch` */
     fetchFn?: typeof fetch;
     /** Whether to automatically retry the query in case of encountering rate limits with 429 error codes (defaults to true) */
@@ -97,7 +99,7 @@ export async function rawExecuteQuery<Result, Variables>(
   const serializedQuery = typeof query === 'string' ? query : print(query);
 
   const response = await fetchFn(
-    'https://graphql.datocms.com/',
+    options.graphqlEndpointUrl || 'https://graphql.datocms.com/',
     buildRequestInit(serializedQuery, options),
   );
 

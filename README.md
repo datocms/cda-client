@@ -82,18 +82,19 @@ const result = await executeQuery(query, options);
 
 #### Options
 
-| Option            | Type          | Description                                                                                                                                                   |
-| ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `token`           | `string`      | DatoCMS API token (required) [Read more](https://www.datocms.com/docs/content-delivery-api/authentication)                                                    |
-| `includeDrafts`   | `boolean`     | If true, return draft versions of records [Read more](https://www.datocms.com/docs/content-delivery-api/api-endpoints#preview-mode-to-retrieve-draft-content) |
-| `excludeInvalid`  | `boolean`     | If true, filter out invalid records [Read more](https://www.datocms.com/docs/content-delivery-api/api-endpoints#strict-mode-for-non-nullable-graphql-types)   |
-| `environment`     | `string`      | Name of the DatoCMS environment for the query [Read more](https://www.datocms.com/docs/content-delivery-api/api-endpoints#specifying-an-environment)          |
-| `contentLink`     | `'vercel-v1'` | If true, embed metadata for Content Link [Read more](https://www.datocms.com/docs/content-delivery-api/api-endpoints#content-link)                            |
-| `baseEditingUrl`  | `string`      | Base URL of your DatoCMS project [Read more](https://www.datocms.com/docs/content-delivery-api/api-endpoints#content-link)                                    |
-| `returnCacheTags` | `boolean`     | If true, receive Cache Tags associated with the query [Read more](https://www.datocms.com/docs/content-delivery-api/api-endpoints#cache-tags)                 |
-| `variables`       | `object`      | Variables to be sent with the query                                                                                                                           |
-| `fetchFn`         | `function`    | Custom fetch function (optional)                                                                                                                              |
-| `autoRetry`       | `boolean`     | Automatically retry on rate limit (default: true)                                                                                                             |
+| Option               | Type                   | Description                                                                                                                                                   |
+| -------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `token`              | `string`               | DatoCMS API token (required) [Read more](https://www.datocms.com/docs/content-delivery-api/authentication)                                                    |
+| `includeDrafts`      | `boolean`              | If true, return draft versions of records [Read more](https://www.datocms.com/docs/content-delivery-api/api-endpoints#preview-mode-to-retrieve-draft-content) |
+| `excludeInvalid`     | `boolean`              | If true, filter out invalid records [Read more](https://www.datocms.com/docs/content-delivery-api/api-endpoints#strict-mode-for-non-nullable-graphql-types)   |
+| `environment`        | `string`               | Name of the DatoCMS environment for the query [Read more](https://www.datocms.com/docs/content-delivery-api/api-endpoints#specifying-an-environment)          |
+| `contentLink`        | `'vercel-v1'`          | If true, embed metadata for Content Link [Read more](https://www.datocms.com/docs/content-delivery-api/api-endpoints#content-link)                            |
+| `baseEditingUrl`     | `string`               | Base URL of your DatoCMS project [Read more](https://www.datocms.com/docs/content-delivery-api/api-endpoints#content-link)                                    |
+| `returnCacheTags`    | `boolean`              | If true, receive Cache Tags associated with the query [Read more](https://www.datocms.com/docs/content-delivery-api/api-endpoints#cache-tags)                 |
+| `variables`          | `object`               | Variables to be sent with the query                                                                                                                           |
+| `fetchFn`            | `function`             | Custom fetch function (optional)                                                                                                                              |
+| `requestInitOptions` | `Partial<RequestInit>` | Additional request initialization options (optional)                                                                                                          |
+| `autoRetry`          | `boolean`              | Automatically retry on rate limit (default: true)                                                                                                             |
 
 
 ### `rawExecuteQuery`
