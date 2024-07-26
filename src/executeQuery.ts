@@ -42,14 +42,22 @@ export type TypedDocumentNode<
 
 export type ExecuteQueryOptions<Variables = unknown> =
   BuildRequestHeadersOptions & {
+    /** The variables to be sent with the query */
     variables?: Variables;
+    /** A fetch function to be used instead of the default `fetch` */
     fetchFn?: typeof fetch;
+    /** Whether to automatically retry the query in case of encountering rate limits with 429 error codes (defaults to true) */
     autoRetry?: boolean;
   };
 
 export type RawExecuteQueryOptions<Variables = unknown> =
   ExecuteQueryOptions<Variables> & { retryCount?: number };
 
+/**
+ * Executes a GraphQL query using the DatoCMS Content Delivery API, returning
+ * both the result of the query as well as the full response object from the
+ * server.
+ */
 export function rawExecuteQuery<Result = unknown, Variables = unknown>(
   query: TypedDocumentNode<Result, Variables>,
   options: ExecuteQueryOptions<Variables>,
@@ -65,11 +73,10 @@ export function rawExecuteQuery<Result = unknown, Variables = unknown>(
   options: ExecuteQueryOptions<Variables>,
 ): Promise<[Result, Response]>;
 
-/**
- * Executes a GraphQL query using the DatoCMS Content Delivery API
- */
 export async function rawExecuteQuery<Result, Variables>(
+  /** The GraphQL query to execute */
   query: string | GraphQLWeb.DocumentNode,
+  /** Execution options, including API token and variables for query execution */
   options: RawExecuteQueryOptions<Variables>,
 ) {
   if (!query) {
@@ -141,6 +148,9 @@ export async function rawExecuteQuery<Result, Variables>(
   return [parsedBody.data, response];
 }
 
+/**
+ * Executes a GraphQL query using the DatoCMS Content Delivery API
+ */
 export function executeQuery<Result = unknown, Variables = unknown>(
   query: TypedDocumentNode<Result, Variables>,
   options: ExecuteQueryOptions<Variables>,
@@ -156,11 +166,10 @@ export function executeQuery<Result = unknown, Variables = unknown>(
   options: ExecuteQueryOptions<Variables>,
 ): Promise<Result>;
 
-/**
- * Executes a GraphQL query using the DatoCMS Content Delivery API
- */
 export async function executeQuery<Result, Variables>(
+  /** The GraphQL query to execute */
   query: string | TypedDocumentNode<Result, Variables>,
+  /** Execution options, including API token and variables for query execution */
   options: ExecuteQueryOptions<Variables>,
 ) {
   const result = await rawExecuteQuery(query as string, options);

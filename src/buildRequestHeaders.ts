@@ -43,7 +43,14 @@ export type BuildRequestHeadersOptions = {
   returnCacheTags?: boolean;
 };
 
+/**
+ * Builds request headers for a GraphQL query towards DatoCMS Content Delivery
+ * API.
+ *
+ * @return {HeadersInit} The built request headers
+ */
 export function buildRequestHeaders(
+  /** The options to build the request headers from */
   options: BuildRequestHeadersOptions,
 ): HeadersInit {
   const headers: HeadersInit = {
