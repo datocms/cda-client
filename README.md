@@ -12,6 +12,49 @@
 
 A lightweight, TypeScript-ready package that offers various helpers around the native Fetch API to perform GraphQL requests towards DatoCMS Content Delivery API.
 
+## TypeScript Support
+
+This package is built with TypeScript and provides type definitions out of the box. It supports `TypedDocumentNode` for improved type inference when using [gql.tada](https://gql-tada.0no.co/), [GraphQL Code Generator](https://the-guild.dev/graphql/codegen) or similar tools.
+
+## Examples
+
+### Basic Query Execution
+
+```typescript
+import { executeQuery } from '@datocms/cda-client';
+
+const query = `
+  query {
+    allArticles {
+      id
+      title
+    }
+  }
+`;
+
+const result = await executeQuery(query, {
+  token: 'your-api-token-here',
+});
+
+console.log(result);
+```
+
+### Using with TypeScript and GraphQL Code Generator
+
+```typescript
+import { executeQuery } from '@datocms/cda-client';
+import { AllArticlesQuery } from './generated/graphql';
+
+const result = await executeQuery(AllArticlesQuery, {
+  token: 'your-api-token-here',
+  variables: {
+    limit: 10,
+  },
+});
+
+console.log(result.allArticles);
+```
+
 ## Installation
 
 ```bash
@@ -95,18 +138,12 @@ const requestInit = buildRequestInit(query, options);
 
 ## Error Handling
 
-The package includes an `ApiError` class for handling API-specific errors. If an error occurs during query execution, an `ApiError` instance will be thrown, containing details about the error, including the status code, response body, and the original query and options.
+In case a query fails (either with an HTTP status code outside of the 2xx range, or for an error in the query), an `ApiError` exception will be thrown by the client. This error contains all the details of the request and response, allowing you to debug and handle errors effectively.
 
-## TypeScript Support
-
-This package is built with TypeScript and provides type definitions out of the box. It supports `TypedDocumentNode` for improved type inference when using GraphQL Code Generator or similar tools.
-
-## Examples
-
-### Basic Query Execution
+### Example
 
 ```typescript
-import { executeQuery } from '@datocms/cda-client';
+import { executeQuery, ApiError } from '@datocms/cda-client';
 
 const query = `
   query {
@@ -117,27 +154,27 @@ const query = `
   }
 `;
 
-const result = await executeQuery(query, {
-  token: 'your-api-token-here',
-});
+try {
+  const result = await executeQuery(query, {
+    token: 'your-api-token-here',
+  });
+  console.log(result);
+} catch (e) {
+  if (e instanceof ApiError) {
+    // Information about the failed request
+    console.log(e.query);
+    console.log(e.options);
 
-console.log(result);
-```
-
-### Using with TypeScript and GraphQL Code Generator
-
-```typescript
-import { executeQuery } from '@datocms/cda-client';
-import { AllArticlesQuery } from './generated/graphql';
-
-const result = await executeQuery(AllArticlesQuery, {
-  token: 'your-api-token-here',
-  variables: {
-    limit: 10,
-  },
-});
-
-console.log(result.allArticles);
+    // Information about the response
+    console.log(e.response.status);
+    console.log(e.response.statusText);
+    console.log(e.response.headers);
+    console.log(e.response.body);
+  } else {
+    // Handle other types of errors
+    throw e;
+  }
+}
 ```
 
 ## Contributing
