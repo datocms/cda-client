@@ -9,8 +9,8 @@
     "test": "echo 1",
     "prebuild": "rimraf dist",
     "build": "tsc && tsc --project ./tsconfig.esnext.json",
-    "prepare": "npm run test && npm run build",
-    "format": "biome check src --write && biome format --write src"
+    "prepare": "npx simple-git-hooks && npm run test && npm run build",
+    "format": "biome check --write --unsafe"
   },
   "keywords": [
     "datocms",
@@ -31,9 +31,13 @@
     "@0no-co/graphql.web": "^1.0.7"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.8.2",
+    "@biomejs/biome": "^1.8.3",
     "np": "^10.0.6",
     "rimraf": "^5.0.7",
+    "simple-git-hooks": "^2.11.1",
     "typescript": "^5.5.2"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npm run format"
   }
 }

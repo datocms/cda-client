@@ -1,18 +1,46 @@
 export type BuildRequestHeadersOptions = {
-  /** DatoCMS API token to use */
+  /**
+   * DatoCMS API token to use
+   *
+   * Read more: https://www.datocms.com/docs/content-delivery-api/authentication
+   */
   token: string;
-  /** If true, draft records will be returned */
+  /**
+   * If true, return draft version of records instead of published ones
+   *
+   * Read more: https://www.datocms.com/docs/content-delivery-api/api-endpoints#preview-mode-to-retrieve-draft-content
+   */
   includeDrafts?: boolean;
-  /** If true, invalid records will be filtered out */
+  /**
+   * If true, filter out invalid records, and narrow down GraphQL types where possible
+   *
+   * Read more: https://www.datocms.com/docs/content-delivery-api/api-endpoints#strict-mode-for-non-nullable-graphql-types
+   */
   excludeInvalid?: boolean;
-  /** The name of the DatoCMS environment where to perform the query (defaults to primary environment) */
+  /**
+   * The name of the DatoCMS environment where to perform the query (defaults to primary environment)
+   *
+   * Read more: https://www.datocms.com/docs/content-delivery-api/api-endpoints#specifying-an-environment
+   */
   environment?: string;
-  /** If true, embed metadata that enable Content Link */
-  contentLink?: true | 'vercel-v1';
-  /** The base URL of the DatoCMS project */
+  /**
+   * If true, embed metadata that enable Content Link
+   *
+   * Read more: https://www.datocms.com/docs/content-delivery-api/api-endpoints#content-link
+   */
+  contentLink?: 'vercel-v1';
+  /**
+   * The base URL of your DatoCMS project (ie. `https://<YOUR-PROJECT-NAME>.admin.datocms.com`)
+   *
+   * Read more: https://www.datocms.com/docs/content-delivery-api/api-endpoints#content-link
+   */
   baseEditingUrl?: string;
-  /** If true, receive the Cache Tags associated with the query */
-  cacheTags?: boolean;
+  /**
+   * If true, receive the Cache Tags associated with the query
+   *
+   * Read more: https://www.datocms.com/docs/content-delivery-api/api-endpoints#cache-tags
+   */
+  returnCacheTags?: boolean;
 };
 
 export function buildRequestHeaders(
@@ -33,16 +61,15 @@ export function buildRequestHeaders(
   }
 
   if (options.environment) {
-    headers['X-Environment'] = 'true';
+    headers['X-Environment'] = options.environment;
   }
 
-  if (options.cacheTags) {
+  if (options.returnCacheTags) {
     headers['X-Cache-Tags'] = 'true';
   }
 
   if (options.contentLink) {
-    headers['X-Visual-Editing'] =
-      options.contentLink === true ? 'vercel-v1' : options.contentLink;
+    headers['X-Visual-Editing'] = options.contentLink;
   }
 
   if (options.baseEditingUrl) {

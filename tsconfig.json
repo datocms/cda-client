@@ -3,13 +3,7 @@
     "declaration": true,
     "module": "commonjs",
     "noImplicitAny": true,
-    "lib": [
-      "es2017",
-      "es2018",
-      "es7",
-      "es6",
-      "dom"
-    ],
+    "lib": ["es2017", "es2018", "es7", "es6", "dom"],
     "declarationDir": "dist/types",
     "outDir": "dist/cjs",
     "target": "es5",
@@ -21,12 +15,6 @@
     "skipLibCheck": false,
     "sourceMap": true
   },
-  "include": [
-    "src/**/*",
-    "test/jest-dom.d.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["src/**/*", "test/jest-dom.d.ts"],
+  "exclude": ["node_modules", "dist"]
 }
