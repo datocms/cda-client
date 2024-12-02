@@ -129,13 +129,13 @@ export async function executeQueryWithAutoPagination<Result, Variables>(
   return result[0];
 }
 
-function convertToAutoPaginationQueryAndVariables<
+export function convertToAutoPaginationQueryAndVariables<
   Result = unknown,
   Variables = unknown,
 >(
   query: TypedDocumentNode<Result, Variables>,
   originalVariables?: Variables,
-): [TypedDocumentNode<Result, Variables>, unknown] {
+): [TypedDocumentNode<Result, Partial<Variables>>, Partial<Variables>] {
   let variables = (originalVariables || {}) as Record<string, unknown>;
   let variablesToExclude: string[] = [];
   let alreadyFoundCollectionSelectionSetThatNeedsToBeDuped = false;
@@ -239,7 +239,7 @@ function convertToAutoPaginationQueryAndVariables<
     },
   });
 
-  return [newQuery, variables];
+  return [newQuery, variables as Partial<Variables>];
 }
 
 function parseCollectionSelectionSetThatNeedsToBeDuped(
