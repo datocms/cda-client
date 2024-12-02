@@ -77,7 +77,7 @@ export async function rawExecuteQueryWithAutoPagination<
     variables: newVariables,
   });
 
-  return [mergeSplittedResults(result) as Result, response];
+  return [mergeAutoPaginationSplittedResults(result) as Result, response];
 }
 
 /**
@@ -140,8 +140,9 @@ export function convertToAutoPaginationQueryAndVariables<
   let variablesToExclude: string[] = [];
   let alreadyFoundCollectionSelectionSetThatNeedsToBeDuped = false;
 
-  const newQuery = visit(query, {
+  const newSelectionQuery = visit(query, {
     SelectionSet: {
+      enter: () => {},
       leave: (selectionSet) => {
         const newSelections: SelectionNode[] = [];
 
@@ -159,13 +160,14 @@ export function convertToAutoPaginationQueryAndVariables<
 
           if (alreadyFoundCollectionSelectionSetThatNeedsToBeDuped) {
             throw new Error(
-              'Cannot manage multiple selections in a single query!',
+              'Cannot auto-paginate multiple selections in a single query!',
             );
           }
 
           alreadyFoundCollectionSelectionSetThatNeedsToBeDuped = true;
 
           variables = omit(variables, info.variablesToExclude);
+
           variablesToExclude = [
             ...variablesToExclude,
             ...info.variablesToExclude,
@@ -213,6 +215,7 @@ export function convertToAutoPaginationQueryAndVariables<
                 },
               ],
             };
+
             newSelections.push(newSelectionNode);
           }
         }
@@ -223,7 +226,11 @@ export function convertToAutoPaginationQueryAndVariables<
         };
       },
     },
+  });
+
+  const newQuery = visit(newSelectionQuery, {
     OperationDefinition: {
+      enter: () => {},
       leave: (operationDefinition) => {
         return {
           ...operationDefinition,
@@ -281,7 +288,15 @@ function parseCollectionSelectionSetThatNeedsToBeDuped(
   if (firstArg.value.kind === Kind.INT) {
     numberOfTotalRecords = Number.parseInt(firstArg.value.value);
   } else if (firstArg.value.kind === Kind.VARIABLE) {
-    numberOfTotalRecords = variables[firstArg.value.name.value] as number;
+    const value = variables[firstArg.value.name.value];
+
+    if (typeof value !== 'number') {
+      throw new Error(
+        `Expected variable '${firstArg.value.name.value}' to be a number`,
+      );
+    }
+
+    numberOfTotalRecords = value;
     variablesToExclude.push(firstArg.value.name.value);
   }
 
@@ -302,7 +317,7 @@ function parseCollectionSelectionSetThatNeedsToBeDuped(
 
     if (typeof variableValue !== 'number') {
       throw new Error(
-        `Expected variable ${skipArg.value.name.value} to be a number`,
+        `Expected variable '${skipArg.value.name.value}' to be a number`,
       );
     }
 
@@ -319,13 +334,17 @@ function parseCollectionSelectionSetThatNeedsToBeDuped(
   };
 }
 
-function mergeSplittedResults(originalData: unknown): unknown {
+export function mergeAutoPaginationSplittedResults(
+  originalData: unknown,
+): unknown {
   if (!originalData || typeof originalData !== 'object') {
     return originalData;
   }
 
   if (Array.isArray(originalData)) {
-    return originalData.map((record) => mergeSplittedResults(record));
+    return originalData.map((record) =>
+      mergeAutoPaginationSplittedResults(record),
+    );
   }
 
   const finalData: Record<string, unknown> = {};
@@ -341,12 +360,12 @@ function mergeSplittedResults(originalData: unknown): unknown {
       ];
 
       for (const record of records) {
-        completeList.push(mergeSplittedResults(record));
+        completeList.push(mergeAutoPaginationSplittedResults(record));
       }
 
       finalData[aliasName] = completeList;
     } else {
-      finalData[fullAliasName] = mergeSplittedResults(
+      finalData[fullAliasName] = mergeAutoPaginationSplittedResults(
         (originalData as Record<string, unknown>)[fullAliasName],
       );
     }

@@ -12,9 +12,9 @@
     "resolveJsonModule": true,
     "strictNullChecks": true,
     "esModuleInterop": true,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "sourceMap": true
   },
-  "include": ["src/**/*", "test/jest-dom.d.ts"],
+  "include": ["src/**/*", "test/jest-dom.d.ts", "__test__"],
   "exclude": ["node_modules", "dist"]
 }

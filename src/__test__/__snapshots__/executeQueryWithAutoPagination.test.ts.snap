@@ -1,0 +1,125 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`convertToAutoPaginationQueryAndVariables: multiple selections to paginate 1`] = `[Error: Cannot auto-paginate multiple selections in a single query!]`;
+
+exports[`convertToAutoPaginationQueryAndVariables: no variables, first < 100 1`] = `
+[
+  "query BuildSitemapUrls {
+  entries: allSuccessStories(first: 50) {
+    slug
+  }
+}",
+  {
+    "other": "foo",
+  },
+]
+`;
+
+exports[`convertToAutoPaginationQueryAndVariables: no variables, first > 100 1`] = `
+[
+  "query BuildSitemapUrls {
+  allBlogPosts {
+    slug
+  }
+  splitted_0_entries: allSuccessStories(first: 100, skip: 0) {
+    ...SuccessStoryUrlFragment
+  }
+  splitted_100_entries: allSuccessStories(first: 100, skip: 100) {
+    ...SuccessStoryUrlFragment
+  }
+  splitted_200_entries: allSuccessStories(first: 100, skip: 200) {
+    ...SuccessStoryUrlFragment
+  }
+  splitted_300_entries: allSuccessStories(first: 100, skip: 300) {
+    ...SuccessStoryUrlFragment
+  }
+  splitted_400_entries: allSuccessStories(first: 100, skip: 400) {
+    ...SuccessStoryUrlFragment
+  }
+}
+
+fragment SuccessStoryUrlFragment on SuccessStoryRecord {
+  slug
+}",
+  {},
+]
+`;
+
+exports[`convertToAutoPaginationQueryAndVariables: variable \`first\` arg, missing variables 1`] = `[Error: Expected variable 'first' to be a number]`;
+
+exports[`convertToAutoPaginationQueryAndVariables: variable \`first\` arg, with variables, \`first\` < 100 1`] = `
+[
+  "query BuildSitemapUrls($first: IntType!) {
+  entries: allSuccessStories(first: $first) {
+    slug
+  }
+}",
+  {
+    "first": 50,
+    "other": "foo",
+  },
+]
+`;
+
+exports[`convertToAutoPaginationQueryAndVariables: variable \`first\` arg, with variables, \`first\` > 100 1`] = `
+[
+  "query BuildSitemapUrls {
+  splitted_0_entries: allSuccessStories(first: 100, skip: 0) {
+    ...SuccessStoryUrlFragment
+  }
+  splitted_100_entries: allSuccessStories(first: 100, skip: 100) {
+    ...SuccessStoryUrlFragment
+  }
+  splitted_200_entries: allSuccessStories(first: 100, skip: 200) {
+    ...SuccessStoryUrlFragment
+  }
+  splitted_300_entries: allSuccessStories(first: 100, skip: 300) {
+    ...SuccessStoryUrlFragment
+  }
+  splitted_400_entries: allSuccessStories(first: 100, skip: 400) {
+    ...SuccessStoryUrlFragment
+  }
+}
+
+fragment SuccessStoryUrlFragment on SuccessStoryRecord {
+  slug
+}",
+  {
+    "other": "foo",
+  },
+]
+`;
+
+exports[`mergeAutoPaginationSplittedResults: nothing to merge 1`] = `
+{
+  "something": [
+    {
+      "entries": [
+        {
+          "slug": "foo",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`mergeAutoPaginationSplittedResults: splitted results to merge 1`] = `
+{
+  "something": [
+    {
+      "entries": [
+        {
+          "slug": "foo",
+        },
+        {
+          "slug": "bar",
+        },
+        {
+          "slug": "qux",
+        },
+      ],
+    },
+  ],
+}
+`;

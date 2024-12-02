@@ -6,7 +6,7 @@
   "module": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
   "scripts": {
-    "test": "echo 1",
+    "test": "vitest --run",
     "prebuild": "rimraf dist",
     "build": "tsc && tsc --project ./tsconfig.esnext.json",
     "prepare": "npx simple-git-hooks && npm run test && npm run build",
@@ -22,20 +22,22 @@
   },
   "files": [
     "dist",
-    "src"
+    "src",
+    "!src/__test__"
   ],
   "author": "Stefano Verna <s.verna@datocms.com>",
   "homepage": "https://github.com/datocms/cda-client",
   "license": "MIT",
   "dependencies": {
-    "@0no-co/graphql.web": "^1.0.7"
+    "@0no-co/graphql.web": "^1.0.11"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
-    "np": "^10.0.6",
+    "np": "^10.1.0",
     "rimraf": "^5.0.7",
     "simple-git-hooks": "^2.11.1",
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.2",
+    "vitest": "^2.1.7"
   },
   "simple-git-hooks": {
     "pre-commit": "npm run format"
