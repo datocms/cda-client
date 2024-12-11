@@ -45,6 +45,27 @@ fragment SuccessStoryUrlFragment on SuccessStoryRecord {
 ]
 `;
 
+exports[`convertToAutoPaginationQueryAndVariables: no variables, first > 100, starting from item 14 1`] = `
+[
+  "query BuildSitemapUrls {
+  allBlogPosts {
+    slug
+  }
+  splitted_13_entries: allSuccessStories(first: 100, skip: 13) {
+    ...SuccessStoryUrlFragment
+  }
+  splitted_113_entries: allSuccessStories(first: 26, skip: 113) {
+    ...SuccessStoryUrlFragment
+  }
+}
+
+fragment SuccessStoryUrlFragment on SuccessStoryRecord {
+  slug
+}",
+  {},
+]
+`;
+
 exports[`convertToAutoPaginationQueryAndVariables: variable \`first\` arg, missing variables 1`] = `[Error: Expected variable 'first' to be a number]`;
 
 exports[`convertToAutoPaginationQueryAndVariables: variable \`first\` arg, with variables, \`first\` < 100 1`] = `

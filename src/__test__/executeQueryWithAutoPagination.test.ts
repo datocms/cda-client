@@ -25,6 +25,26 @@ test('convertToAutoPaginationQueryAndVariables: no variables, first > 100', () =
   expect([print(newQuery), variables]).toMatchSnapshot();
 });
 
+test('convertToAutoPaginationQueryAndVariables: no variables, first > 100, starting from item 14', () => {
+  const query = parse(/* GraphQL */ `
+    query BuildSitemapUrls {
+      allBlogPosts {
+        slug
+      }
+      entries: allSuccessStories(skip: 13, first: 126) {
+        ...SuccessStoryUrlFragment
+      }
+    }
+
+    fragment SuccessStoryUrlFragment on SuccessStoryRecord {
+      slug
+    }
+  `);
+
+  const [newQuery, variables] = convertToAutoPaginationQueryAndVariables(query);
+  expect([print(newQuery), variables]).toMatchSnapshot();
+});
+
 test('convertToAutoPaginationQueryAndVariables: multiple selections to paginate', () => {
   const query = parse(/* GraphQL */ `
     query BuildSitemapUrls {
