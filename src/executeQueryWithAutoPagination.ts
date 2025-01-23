@@ -15,6 +15,8 @@ import {
   rawExecuteQuery,
 } from './executeQuery';
 
+const MAX_PAGINATION_LENGTH = 500;
+
 /**
  * Extends the functionality of `rawExecuteQuery()` with automatic pagination
  * support for queries where the `first:` argument surpasses the Content
@@ -178,7 +180,7 @@ export function convertToAutoPaginationQueryAndVariables<
           for (
             skip = info.initialSkip;
             info.numberOfTotalRecords - skip + info.initialSkip > 0;
-            skip += 100
+            skip += MAX_PAGINATION_LENGTH
           ) {
             const newSelectionNode: FieldNode = {
               ...(selectionNode as FieldNode),
@@ -198,7 +200,7 @@ export function convertToAutoPaginationQueryAndVariables<
                     kind: Kind.INT,
                     value: Math.min(
                       info.numberOfTotalRecords - skip + info.initialSkip,
-                      100,
+                      MAX_PAGINATION_LENGTH,
                     ).toString(),
                   },
                 },
@@ -300,8 +302,8 @@ function parseCollectionSelectionSetThatNeedsToBeDuped(
     variablesToExclude.push(firstArg.value.name.value);
   }
 
-  // ignore if first < 100
-  if (!numberOfTotalRecords || numberOfTotalRecords <= 100) {
+  // ignore if first < MAX_PAGINATION_LENGTH
+  if (!numberOfTotalRecords || numberOfTotalRecords <= MAX_PAGINATION_LENGTH) {
     return false;
   }
 

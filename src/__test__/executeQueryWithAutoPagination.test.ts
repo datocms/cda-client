@@ -11,7 +11,7 @@ test('convertToAutoPaginationQueryAndVariables: no variables, first > 100', () =
       allBlogPosts {
         slug
       }
-      entries: allSuccessStories(first: 500) {
+      entries: allSuccessStories(first: 2500) {
         ...SuccessStoryUrlFragment
       }
     }
@@ -31,7 +31,7 @@ test('convertToAutoPaginationQueryAndVariables: no variables, first > 100, start
       allBlogPosts {
         slug
       }
-      entries: allSuccessStories(skip: 13, first: 126) {
+      entries: allSuccessStories(skip: 13, first: 526) {
         ...SuccessStoryUrlFragment
       }
     }
@@ -48,10 +48,10 @@ test('convertToAutoPaginationQueryAndVariables: no variables, first > 100, start
 test('convertToAutoPaginationQueryAndVariables: multiple selections to paginate', () => {
   const query = parse(/* GraphQL */ `
     query BuildSitemapUrls {
-      allBlogPosts(first: 500) {
+      allBlogPosts(first: 2500) {
         slug
       }
-      entries: allSuccessStories(first: 500) {
+      entries: allSuccessStories(first: 2500) {
         ...SuccessStoryUrlFragment
       }
     }
@@ -116,7 +116,7 @@ test('convertToAutoPaginationQueryAndVariables: variable `first` arg, with varia
 
   const [newQuery, variables] = convertToAutoPaginationQueryAndVariables(
     query,
-    { first: 500, other: 'foo' },
+    { first: 2500, other: 'foo' },
   );
   expect([print(newQuery), variables]).toMatchSnapshot();
 });
