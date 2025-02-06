@@ -10,7 +10,7 @@
 
 # @datocms/cda-client
 
-A lightweight, TypeScript-ready package that offers various helpers around the native Fetch API to perform GraphQL requests towards DatoCMS Content Delivery API.
+A lightweight, TypeScript-ready package that offers various helpers around the native Fetch API to perform GraphQL requests towards DatoCMS [Content Delivery API](https://www.datocms.com/docs/content-delivery-api).
 
 ## TypeScript Support
 
