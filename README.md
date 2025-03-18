@@ -150,7 +150,7 @@ fragment SuccessStoryUrlFragment on SuccessStoryRecord {
 }
 ```
 
-Well, that's a roadblock: DatoCMS CDA has limitations on the pagination page length (currently 100 item).
+Well, that's a roadblock: DatoCMS CDA has limitations on the pagination page length (currently 500 items).
 
 That means you should introduce a variable and execute the query multiple times, each time skipping the record
 that have been returned by the previous query.
@@ -162,19 +162,19 @@ query BuildSitemapUrls {
   allBlogPosts {
     slug
   }
-  splitted_0_entries: allSuccessStories(first: 100, skip: 0) {
+  splitted_0_entries: allSuccessStories(first: 500, skip: 0) {
     ...SuccessStoryUrlFragment
   }
-  splitted_100_entries: allSuccessStories(first: 100, skip: 100) {
+  splitted_500_entries: allSuccessStories(first: 500, skip: 500) {
     ...SuccessStoryUrlFragment
   }
-  splitted_200_entries: allSuccessStories(first: 100, skip: 200) {
+  splitted_1000_entries: allSuccessStories(first: 500, skip: 1000) {
     ...SuccessStoryUrlFragment
   }
-  splitted_300_entries: allSuccessStories(first: 100, skip: 300) {
+  splitted_1500_entries: allSuccessStories(first: 500, skip: 1500) {
     ...SuccessStoryUrlFragment
   }
-  splitted_400_entries: allSuccessStories(first: 100, skip: 400) {
+  splitted_2000_entries: allSuccessStories(first: 500, skip: 2000) {
     ...SuccessStoryUrlFragment
   }
 }
