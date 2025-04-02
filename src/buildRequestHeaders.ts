@@ -41,6 +41,11 @@ export type BuildRequestHeadersOptions = {
    * Read more: https://www.datocms.com/docs/content-delivery-api/api-endpoints#cache-tags
    */
   returnCacheTags?: boolean;
+  /**
+   * Specify a custom Referer header. It can be useful to track down specific requests under
+   * the Project Usages section (https://www.datocms.com/docs/general-concepts/project-account-usages)
+   */
+  referer?: string;
 };
 
 /**
@@ -81,6 +86,10 @@ export function buildRequestHeaders(
 
   if (options.baseEditingUrl) {
     headers['X-Base-Editing-Url'] = options.baseEditingUrl;
+  }
+
+  if (options.referer) {
+    headers.Referer = options.referer;
   }
 
   return headers;
