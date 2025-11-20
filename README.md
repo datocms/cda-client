@@ -150,7 +150,7 @@ fragment SuccessStoryUrlFragment on SuccessStoryRecord {
 }
 ```
 
-Well, that's a roadblock: The CDA is limited to returning a maximum of `500` items at a time. If you needed all `2500` records, you would have to manually paginate it by executing the query multiple times, each time incrementing the `skip` parameter by an additional 500. That's a lot of trouble.
+Well, that's a roadblock: The CDA is limited to returning a maximum of `500` items at a time. If you try to fetch more than that, you'll get an error. Instead, if you wanted to fetch all `2500` records, you would normally have to manually paginate it by executing the query multiple times, each time incrementing the `skip` parameter by an additional 500. That's a lot of work!
 
 Fortunately, the helper function `executeQueryWithAutoPagination` does that on your behalf: the above query is analyzed and rewritten on the fly like this:
 
