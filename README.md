@@ -132,7 +132,7 @@ Parameters are the same available for `executeQuery`:
 
 ### How does it work?
 
-Suppose you want to execute the following query:
+Suppose you want to execute the following query on an model with `2500` records:
 
 ```graphql
 query BuildSitemapUrls {
@@ -140,7 +140,7 @@ query BuildSitemapUrls {
     slug
   }
 
-  entries: allSuccessStories(first: 500) {
+  entries: allSuccessStories(first: 2500) {
     ...SuccessStoryUrlFragment
   }
 }
@@ -150,12 +150,9 @@ fragment SuccessStoryUrlFragment on SuccessStoryRecord {
 }
 ```
 
-Well, that's a roadblock: DatoCMS CDA has limitations on the pagination page length (currently 500 items).
+Well, that's a roadblock: The CDA is limited to returning a maximum of `500` items at a time. If you try to fetch more than that, you'll get an error. Instead, if you wanted to fetch all `2500` records, you would normally have to manually paginate it by executing the query multiple times, each time incrementing the `skip` parameter by an additional 500. That's a lot of work!
 
-That means you should introduce a variable and execute the query multiple times, each time skipping the record
-that have been returned by the previous query.
-
-`executeQueryWithAutoPagination` does that on your behalf: the above query is analyzed and rewritten on the fly like this:
+Fortunately, the helper function `executeQueryWithAutoPagination` does that on your behalf: the above query is analyzed and rewritten on the fly like this:
 
 ```graphql
 query BuildSitemapUrls {
@@ -189,10 +186,10 @@ Once executed, the results get collected and recomposed as if nothing happened.
 #### Limitations
 
 `executeQueryWithAutoPagination` works only when the query contains only one selection that has 
-an oversized `first:` argument (i.e. `first:` argument surpasses the Content Delivery API's result limit).
-If two or more fields have oversiaed patination, the function triggers an error.
+an oversized `first:` argument (i.e. the `first:` argument surpasses the Content Delivery API's result limit of `500`).
+If two or more requested models have oversized pagination, the function will return an error.
 
-The rewritten query must still respect the [complexity cost](https://www.datocms.com/docs/content-delivery-api/complexity).
+The rewritten query must still respect the [GraphQL complexity cost](https://www.datocms.com/docs/content-delivery-api/complexity).
 
 ### `rawExecuteQueryWithAutoPagination`
 
