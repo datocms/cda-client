@@ -28,12 +28,12 @@ export function buildRequestInit<Variables = unknown>(
   const stringifiedQuery = typeof query === 'string' ? query : print(query);
 
   return {
-    method: 'POST' as const,
+    ...options?.requestInitOptions,
     headers: buildRequestHeaders(options),
     body: JSON.stringify({
       query: stringifiedQuery,
       variables: options?.variables,
     }),
-    ...options?.requestInitOptions,
+    method: 'POST' as const,
   } as const;
 }
