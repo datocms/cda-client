@@ -28,7 +28,7 @@ export function buildRequestInit<Variables = unknown>(
   const stringifiedQuery = typeof query === 'string' ? query : print(query);
 
   return {
-    method: 'POST',
+    method: 'POST' as const,
     headers: buildRequestHeaders(options),
     body: JSON.stringify({
       query: stringifiedQuery,
