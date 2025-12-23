@@ -28,7 +28,7 @@ export type BuildRequestHeadersOptions = {
    *
    * Read more: https://www.datocms.com/docs/content-delivery-api/api-endpoints#content-link
    */
-  contentLink?: 'vercel-v1';
+  contentLink?: 'v1' | 'vercel-v1';
   /**
    * The base URL of your DatoCMS project (ie. `https://<YOUR-PROJECT-NAME>.admin.datocms.com`)
    *
