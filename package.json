@@ -26,7 +26,14 @@
     "!src/__test__"
   ],
   "author": "Stefano Verna <s.verna@datocms.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/datocms/cda-client.git"
+  },
   "homepage": "https://github.com/datocms/cda-client",
+  "bugs": {
+    "url": "https://github.com/datocms/cda-client/issues"
+  },
   "license": "MIT",
   "dependencies": {
     "@0no-co/graphql.web": "^1.0.11"
