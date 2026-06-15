@@ -237,7 +237,7 @@ export function convertToAutoPaginationQueryAndVariables<
         return {
           ...operationDefinition,
           variableDefinitions: operationDefinition.variableDefinitions?.filter(
-            (variableDefinition) => {
+            (variableDefinition: GraphQLWeb.VariableDefinitionNode) => {
               return !variablesToExclude.includes(
                 variableDefinition.variable.name.value,
               );

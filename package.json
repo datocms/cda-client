@@ -28,7 +28,7 @@
   "author": "Stefano Verna <s.verna@datocms.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/datocms/cda-client.git"
+    "url": "git+https://github.com/datocms/cda-client.git"
   },
   "homepage": "https://github.com/datocms/cda-client",
   "bugs": {
