@@ -1,10 +1,10 @@
 import type * as GraphQLWeb from '@0no-co/graphql.web';
 import { print } from '@0no-co/graphql.web';
-import { ApiError } from './ApiError';
+import { ApiError } from './ApiError.js';
 import {
   type BuildRequestInitOptions,
   buildRequestInit,
-} from './buildRequestInit';
+} from './buildRequestInit.js';
 
 /** A GraphQL `DocumentNode` with attached generics for its result data and variables.
  *
