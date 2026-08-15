@@ -1,14 +1,24 @@
 {
   "name": "@datocms/cda-client",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "JS client for DatoCMS GraphQL Content Delivery API based on the browser Fetch API",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./dist/*": "./dist/*",
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "test": "vitest --run",
     "prebuild": "rimraf dist",
-    "build": "tsc && tsc --project ./tsconfig.esnext.json",
+    "build": "tsc && tsc --project ./tsconfig.esnext.json && echo '{\"type\":\"module\"}' > dist/esm/package.json",
     "prepare": "npx simple-git-hooks && npm run test && npm run build",
     "format": "biome check --write --unsafe"
   },

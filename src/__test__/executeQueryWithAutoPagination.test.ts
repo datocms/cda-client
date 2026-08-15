@@ -3,7 +3,7 @@ import { expect, test } from 'vitest';
 import {
   convertToAutoPaginationQueryAndVariables,
   mergeAutoPaginationSplittedResults,
-} from '../executeQueryWithAutoPagination';
+} from '../executeQueryWithAutoPagination.js';
 
 test('convertToAutoPaginationQueryAndVariables: no variables, first > 100', () => {
   const query = parse(/* GraphQL */ `

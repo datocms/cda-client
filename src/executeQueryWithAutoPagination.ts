@@ -13,7 +13,7 @@ import {
   type ExecuteQueryOptions,
   type TypedDocumentNode,
   rawExecuteQuery,
-} from './executeQuery';
+} from './executeQuery.js';
 
 const MAX_PAGINATION_LENGTH = 500;
 

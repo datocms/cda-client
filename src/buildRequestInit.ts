@@ -3,7 +3,7 @@ import { print } from '@0no-co/graphql.web';
 import {
   type BuildRequestHeadersOptions,
   buildRequestHeaders,
-} from './buildRequestHeaders';
+} from './buildRequestHeaders.js';
 
 export type BuildRequestInitOptions<Variables = unknown> =
   BuildRequestHeadersOptions & {
