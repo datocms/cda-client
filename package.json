@@ -51,6 +51,7 @@
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
     "np": "^10.1.0",
+    "pkg-pr-new": "^0.0.88",
     "rimraf": "^5.0.7",
     "simple-git-hooks": "^2.11.1",
     "typescript": "^5.5.2",
