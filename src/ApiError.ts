@@ -17,6 +17,41 @@ export type ApiErrorResponse = {
  */
 const API_ERROR = Symbol.for('@datocms/cda-client:ApiError');
 
+/**
+ * Returns a copy of the options with the API token blanked out.
+ *
+ * Errors travel: they get logged, serialized, sent to error trackers, and
+ * occasionally echoed back to an HTTP client by a route handler that catches
+ * them. None of those places is a good home for a token. The real one only ever
+ * reaches the `Authorization` header of the request.
+ */
+function redactToken<Options extends BuildRequestHeadersOptions>(
+  options: Options,
+): Options {
+  if (!options.token) {
+    return options;
+  }
+
+  return {
+    ...options,
+    // The last 4 characters are enough to tell two tokens apart while
+    // debugging, and useless to whoever gets hold of the log.
+    token: `[REDACTED, ending in ${options.token.slice(-4)}]`,
+  };
+}
+
+/**
+ * Hides properties from anything that walks own enumerable keys —
+ * `console.error()`, `JSON.stringify()`, object spread, `serialize-error`,
+ * error trackers. Reading `error.options` explicitly keeps working exactly as
+ * before; the data just stops travelling by accident.
+ */
+function hideProperties(target: object, keys: string[]) {
+  for (const key of keys) {
+    Object.defineProperty(target, key, { enumerable: false });
+  }
+}
+
 export class ApiError extends Error {
   public query: string;
   public options: BuildRequestHeadersOptions;
@@ -85,6 +120,8 @@ export class ApiError extends Error {
     this.name = 'ApiError';
     this.response = response;
     this.query = query;
-    this.options = options;
+    this.options = redactToken(options);
+
+    hideProperties(this, ['query', 'options', 'response']);
   }
 }

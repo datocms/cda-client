@@ -48,7 +48,24 @@ describe('ApiError', () => {
 
     expect(error.response.status).toBe(422);
     expect(error.query).toBe('{ allArticles { id } }');
-    expect(error.options.token).toBe('fake-token');
+  });
+
+  it('keeps the API token out of the error', () => {
+    const error = buildError();
+
+    expect(error.options.token).toBe('[REDACTED, ending in oken]');
+    expect(JSON.stringify(error)).not.toContain('fake-token');
+  });
+
+  // `console.error()`, `serialize-error` and most error trackers walk own
+  // enumerable keys: the details of the failed request must not be among them.
+  it('does not travel through incidental serialization', () => {
+    const error = buildError();
+
+    expect(Object.keys(error)).not.toContain('options');
+    expect(Object.keys(error)).not.toContain('query');
+    expect(Object.keys(error)).not.toContain('response');
+    expect(JSON.stringify({ ...error })).not.toContain('allArticles');
   });
 
   // The package ships parallel CJS and ESM builds, so a bundler can load two

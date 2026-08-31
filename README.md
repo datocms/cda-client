@@ -260,7 +260,9 @@ try {
   console.log(result);
 } catch (e) {
   if (e instanceof ApiError) {
-    // Information about the failed request
+    // Information about the failed request. The API token is redacted from
+    // `e.options`: an error tends to end up in logs and error trackers, which
+    // are no place for a token.
     console.log(e.query);
     console.log(e.options);
 
