@@ -20,7 +20,10 @@
     "prebuild": "rimraf dist",
     "build": "tsc && tsc --project ./tsconfig.esnext.json && echo '{\"type\":\"module\"}' > dist/esm/package.json",
     "prepare": "npx simple-git-hooks && npm run test && npm run build",
-    "format": "biome check --write --unsafe"
+    "format": "biome check --write --unsafe",
+    "changeset": "changeset",
+    "release": "release-toolchain",
+    "release:next": "release-toolchain --tag next"
   },
   "keywords": [
     "datocms",
@@ -33,7 +36,8 @@
   "files": [
     "dist",
     "src",
-    "!src/__test__"
+    "!src/__test__",
+    "CHANGELOG.md"
   ],
   "author": "Stefano Verna <s.verna@datocms.com>",
   "repository": {
@@ -50,7 +54,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
-    "np": "^10.1.0",
+    "@changesets/cli": "^3.0.1",
+    "@datocms/release-toolchain": "github:datocms/release-toolchain#v1.0.0",
     "pkg-pr-new": "^0.0.88",
     "rimraf": "^5.0.7",
     "simple-git-hooks": "^2.11.1",
