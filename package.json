@@ -23,7 +23,8 @@
     "format": "biome check --write --unsafe",
     "changeset": "changeset",
     "release": "release-toolchain",
-    "release:next": "release-toolchain --tag next"
+    "release:next": "release-toolchain --tag next",
+    "prepublishOnly": "release-toolchain --assert-release"
   },
   "keywords": [
     "datocms",
@@ -55,7 +56,7 @@
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
     "@changesets/cli": "^3.0.1",
-    "@datocms/release-toolchain": "github:datocms/release-toolchain#v1.1.0",
+    "@datocms/release-toolchain": "github:datocms/release-toolchain#v1.2.0",
     "pkg-pr-new": "^0.0.88",
     "rimraf": "^5.0.7",
     "simple-git-hooks": "^2.11.1",
