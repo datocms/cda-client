@@ -122,7 +122,7 @@ export async function rawExecuteQuery<Result, Variables>(
       ? Number.parseInt(rateLimitReset, 10)
       : retryCount;
 
-    await wait(waitTimeInSecs * 1000);
+    await wait(withJitter(waitTimeInSecs) * 1000);
 
     return rawExecuteQuery<Result, Variables>(serializedQuery, {
       ...options,
@@ -182,4 +182,29 @@ function wait(time: number) {
   return new Promise((resolve) => {
     setTimeout(resolve, time);
   });
+}
+
+/**
+ * The CDA enforces two per-token buckets — 40 req/s and 1000 req/min — and
+ * `X-RateLimit-Reset` tells us how many seconds are left until whichever
+ * bucket we hit refills (so anywhere from ~1s to ~60s). A frontend build
+ * commonly fires many requests with the *same* token in parallel (e.g. a
+ * static site generator rendering pages concurrently), so a burst that trips
+ * the limit trips it for all of them together, and without jitter they'd all
+ * wake up and retry on the same tick, reproducing the exact burst that got
+ * them rate-limited.
+ *
+ * We never wait less than `baseSeconds` — retrying before the bucket refills
+ * is guaranteed to 429 again. On top of that we add a random extra, capped at
+ * `JITTER_CAP_SECONDS`: what desynchronizes concurrent retries is a few
+ * seconds of spread, not a delay proportional to the wait itself — doubling
+ * a 1s wait is fine, but doubling the ~60s wait of the per-minute bucket
+ * would needlessly leave callers waiting up to a minute longer than needed.
+ */
+const JITTER_CAP_SECONDS = 5;
+
+export function withJitter(baseSeconds: number): number {
+  return (
+    baseSeconds + Math.random() * Math.min(baseSeconds, JITTER_CAP_SECONDS)
+  );
 }
